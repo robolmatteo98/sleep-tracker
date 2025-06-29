@@ -1,9 +1,11 @@
-./sleep-backend-api/node_modules
-./sleep-frontend/node_modules
+# Ignora node_modules in tutti i sottoprogetti
+sleep-backend-api/node_modules/
+sleep-frontend/node_modules/
 
-./sleep-backend-api/.env
-./sleep-backend-api/.env.dev
-./sleep-backend-api/.env.prod
-./sleep-frontend/.env
-./sleep-frontend/.env.dev
-./sleep-frontend/.env.prod
+# Ignora file .env in entrambi i sottoprogetti
+sleep-backend-api/.env
+sleep-backend-api/.env.dev
+sleep-backend-api/.env.prod
+sleep-frontend/.env
+sleep-frontend/.env.dev
+sleep-frontend/.env.prod
