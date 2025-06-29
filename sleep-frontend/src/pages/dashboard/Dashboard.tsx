@@ -5,7 +5,7 @@ import './Dashboard.css';
 import Select from "../../components/select/Select";
 
 import DayChart from '../trends/day/DayChart';
-import WeekChart from '../trends/month/MonthChart';
+import WeekChart from '../trends/week/WeekChart';
 import MonthChart from '../trends/month/MonthChart';
 
 import { Option } from "../../types/entities";
