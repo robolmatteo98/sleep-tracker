@@ -1,7 +1,7 @@
-# SLEEP TRACKER
+# 🌙 SLEEP TRACKER
 
-## PRIMO UTILIZZO
-# Creazione db
+# 🔧 PRIMO UTILIZZO
+## Creazione db
 docker run --name my-postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=password -e POSTGRES_DB=sleep_db -p 5435:5432 -d postgres
 docker cp 4-sleep_data_2025-02-11.csv my-postgres:/4-sleep_data_2025-02-11.csv
 docker exec -it my-postgres psql -U admin -d sleep_db
@@ -16,23 +16,22 @@ DELIMITER ','
 CSV HEADER;
 
 
-## UTILIZZO SVILUPPATORE (sviluppo - dev)
-# Avviare il db
+# 👨‍💻 UTILIZZO SVILUPPATORE (sviluppo - dev)
+## Avviare il db
 docker start <container-id>
 
-# Avviare il back-end (sviluppo)
+## Avviare il back-end (sviluppo)
 cd sleep-backend-api
 node index.js
 
-# Avviare il front-end (sviluppo)
+## Avviare il front-end (sviluppo)
 cd sleep-frontend
 npm run dev
 
 
-## UTILIZZO PRODUZIONE
-# Avvio il db
+# 🚀 UTILIZZO PRODUZIONE
+## Avvio il db
 docker start <container-id>
 
-# Avvio automatico applicazione
+## Avvio automatico applicazione
 docker compose up
-# sleep-tracker
