@@ -1,0 +1,9 @@
+./sleep-backend-api/node_modules
+./sleep-frontend/node_modules
+
+./sleep-backend-api/.env
+./sleep-backend-api/.env.dev
+./sleep-backend-api/.env.prod
+./sleep-frontend/.env
+./sleep-frontend/.env.dev
+./sleep-frontend/.env.prod
