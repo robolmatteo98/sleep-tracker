@@ -1,8 +1,10 @@
+require('dotenv').config(); // carica le variabili d'ambiente
+
 const express = require("express");
 const app = express();
 const cors = require('cors');
 
-const PORT = 5001;
+const PORT = process.env.PORT || 5001; // usa la variabile, oppure un fallback
 
 const pool = require('./config/db');
 
