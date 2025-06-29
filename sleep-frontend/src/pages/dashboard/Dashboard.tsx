@@ -16,8 +16,6 @@ const trends: Option[] = [
   { value: "31", label: "MENSILE" }
 ]
 
-// TODO: implementare variabili dev e prod?
-
 const Dashboard = () => {
   // States
   const [selectedTrend, setSelectedTrend] = useState<Option | null>(null);

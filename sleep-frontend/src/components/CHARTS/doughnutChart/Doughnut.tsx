@@ -46,7 +46,6 @@ const options = {
 
 const COLORS = ["#63d297", "#ff5252", "#2f855a", "#d9f2e5"];
 
-// TODO: check se useState
 const DoughnutChart = ({ sleepData }: { sleepData: SleepData[] }) => {
   // Methods
   const preparePieData = (data: SleepData[]) => {
