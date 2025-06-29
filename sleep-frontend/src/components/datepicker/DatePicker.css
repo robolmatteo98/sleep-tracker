@@ -1,0 +1,97 @@
+.datepicker-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.arrow:hover {
+  color: #63d297;
+}
+
+.input-date {
+  flex: 1; /* <-- molto importante: l'input prende lo spazio disponibile */
+  width: 250px;
+  border: #4ba173 2px solid;
+  color: #4ba173;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: large;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.input-date:hover,
+.input-date:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background-color: #4ba173;
+  color: white;
+  border: 2px solid;
+}
+
+/* menu calendario */
+/* Sfondo generale del calendario */
+.react-datepicker {
+  font-family: Arial, Helvetica, sans-serif;
+  border: 2px solid #4ba173;
+  border-radius: 6px;
+  background-color: white;
+  color: #4ba173;
+}
+
+/* Header del calendario (mese/anno) */
+.react-datepicker__header {
+  background-color: #4ba173;
+  color: white;
+  border-bottom: none;
+}
+
+/* Giorni della settimana */
+.react-datepicker__day-name {
+  color: white;
+}
+
+/* Giorni */
+.react-datepicker__day {
+  color: #4ba173;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.react-datepicker__day:hover {
+  background-color: #e8f5ee;
+}
+
+/* Giorno selezionato */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #4ba173;
+  color: white;
+}
+
+.react-datepicker__day--outside-month {
+  color: #ccc;
+}
+
+/* Oggi */
+.react-datepicker__day--today {
+  font-weight: bold;
+  border: 1px solid #4ba173;
+}
+
+/* Frecce di navigazione */
+.react-datepicker__navigation-icon::before {
+  border-color: white;
+}

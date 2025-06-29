@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  backend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./sleep-backend-api:/app
+    command: sh -c "npm install && npm start"
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+
+  frontend:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./sleep-frontend:/app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true  # se la rete esiste già (creata da te per il db)

@@ -1,0 +1,117 @@
+/* */
+.form {
+  display: flex;
+  padding: 1%;
+  height: 100vh;
+}
+
+.left {
+  width: 30%;
+}
+
+.center {
+  width: 40%;
+  padding-top: 1%;
+}
+
+.right {
+  display: flex;
+  justify-content: center; 
+  width: 30%;
+  height: 50%;
+}
+
+.day-button-container {
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 5%;
+  text-align: center;
+}
+
+/* form centrale del punteggio */
+.form_center {
+  padding-left: 10%;
+  padding-right: 10%;
+  display: flex;
+}
+
+.form_center .left {
+  flex: 1;
+}
+
+.form_center .right {
+  flex: 1;
+}
+
+.errorMex {
+  padding: 5%;
+  font-size: x-large;
+}
+
+.data-card-r,
+.data-card-l {
+  border: 1px solid;
+  border-radius: 12px;
+  height: min-content;
+}
+
+.data-card-l {
+  margin: 1%;
+  padding-bottom: 1.5%;
+}
+
+.data-card-insights {
+  border: 1px solid;
+  border-radius: 12px;
+  height: min-content;
+  padding: 2%;
+  margin: 1%;
+}
+
+.data-card-l:hover,
+.data-card-r:hover,
+.data-card-insights:hover {
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-medium {
+  font-size: medium;
+}
+
+.text-bold {
+  font-weight: bold;
+  font-size: larger;
+}
+
+/* colori */
+.form-bold {
+  margin: 3%;
+  margin-top: 8%;
+  display: flex;
+  font-weight: bold;
+}
+
+.REM-bold {
+  color: #d9f2e5;
+  width: 25%;
+}
+
+.Light-bold {
+  color: #63d297;
+  width: 25%;
+}
+
+.Awake-bold {
+  color: #ff5252;
+  width: 25%;
+}
+
+.Deep-bold {
+  color: #2f855a;
+  width: 25%;
+}

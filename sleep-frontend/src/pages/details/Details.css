@@ -1,0 +1,86 @@
+.details-header-container {
+  display: flex;
+  padding: 1%;
+}
+
+.width-button {
+  width: 400px;
+  padding: 0.25%;
+}
+
+/* titolo del grafico */
+.statsTitle {
+  text-align: center;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.tabellare-container {
+  display: flex;
+  padding: 1%;
+}
+
+.table-container {
+  height: 400px;
+  overflow-y: auto;
+  width: 50%; /* Larghezza della tabella */
+  margin: 1%;
+}
+
+.percentage-container {
+  width: 50%;
+  margin: 1%;
+}
+
+table {
+  width: 100%;
+  background-color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 8px;
+}
+
+.table-font {
+  font-size: small;
+}
+
+th, td {
+  padding: 12px 16px; /* spazio dentro celle */
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+th {
+  background-color: #eee;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+/* colori nelle tabelle */
+.REM {
+  background-color: #d9f2e5;
+  color: black;
+}
+
+.Light {
+  background-color: #63d297;
+  color: black;
+}
+
+.Awake {
+  background-color: #ff5252;
+  color: white;
+}
+
+.Deep {
+  background-color: #2f855a;
+  color: white;
+}

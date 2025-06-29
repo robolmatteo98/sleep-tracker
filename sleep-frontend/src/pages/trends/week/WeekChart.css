@@ -1,0 +1,14 @@
+.week-container {
+  display: flex;
+  padding-top: 5%;
+}
+
+.quality-chart {
+  width: 50%;
+  align-items: center;
+}
+
+.points-chart {
+  width: 50%;
+  align-items: center;
+}
