@@ -6,6 +6,8 @@ services:
     working_dir: /app
     volumes:
       - ./sleep-backend-api:/app
+    env_file:
+      - ./sleep-backend-api/.env.production
     command: sh -c "npm install && npm start"
     ports:
       - "5001:5001"
@@ -25,4 +27,4 @@ services:
 
 networks:
   app-network:
-    external: true  # se la rete esiste già (creata da te per il db)
+    external: true

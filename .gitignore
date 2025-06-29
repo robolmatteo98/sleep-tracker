@@ -4,4 +4,5 @@ sleep-frontend/node_modules/
 
 # Ignora file .env in entrambi i sottoprogetti
 sleep-backend-api/.env
+sleep-backend-api/.env.production
 sleep-frontend/.env
