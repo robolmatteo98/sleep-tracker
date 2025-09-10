@@ -36,8 +36,8 @@ const Details = () => {
   const fromDataToSleepData = (data: SleepDataResponse) => {
     const sleepData: SleepData[] = data.data.map(item => ({
       id: item.id,
-      _timestamp: DateTime.fromISO(item._timestamp).toFormat('HH:mm'),
-      _sleep_stage: item._sleep_stage
+      _timestamp: DateTime.fromISO(item.timestamp).toFormat('HH:mm'),
+      _sleep_stage: item.sleep_stage
     }));
 
     setSleepData(sleepData);

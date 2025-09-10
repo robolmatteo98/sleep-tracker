@@ -71,12 +71,14 @@ const DayChart = () => {
   }
 
   const fromDataToSleepData = (data: SleepDataResponse) => {
+    console.log(data)
     const sleepData: SleepData[] = data.data.map(item => ({
       id: item.id,
-      _timestamp: DateTime.fromISO(item._timestamp).toFormat('dd/MM/yyyy HH:mm'),
-      _sleep_stage: item._sleep_stage
+      _timestamp: DateTime.fromISO(item.timestamp).toFormat('dd/MM/yyyy HH:mm'),
+      _sleep_stage: item.sleep_stage
     }));
 
+    console.log(sleepData)
     setSleepData(sleepData);
     setPercentage(getPercentageValues(stages, sleepData));
   }

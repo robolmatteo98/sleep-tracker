@@ -1,8 +1,8 @@
 export type SleepDataResponse = {
   data: {
     id: number;
-    _timestamp: string;
-    _sleep_stage: string;
+    timestamp: string;
+    sleep_stage: string;
   } []
 };
 
