@@ -63,7 +63,7 @@ const WeekChart = () => {
               <SleepQualityBarChart array={quality} label="Qualità del Sonno" measure="Qualità (%)" />
             </div>
             <div className="points-chart">
-              <SleepQualityBarChart array={points} label="Punteggio del Sonno" measure="Punteggio" />
+              <SleepQualityBarChart array={points} label="Minuti di Sonno" measure="Punteggio" />
             </div>
           </div>
       }
