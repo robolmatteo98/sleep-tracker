@@ -10,11 +10,11 @@ docker exec -it my-postgres psql -U admin -d sleep_db
 
 CREATE TABLE sleep_data (
   id SERIAL PRIMARY KEY,
-  timestamp VARCHAR(30) NOT NULL,
+  timestamp TIMESTAMP NOT NULL,
   sleep_stage VARCHAR(50) NOT NULL
 );
 
-COPY sleep_data(timestamp, sleep_stage)
+COPY sleep_data_format(timestamp, sleep_stage)
 FROM '/4-sleep_data_2025-02-11.csv'
 DELIMITER ','
 CSV HEADER;
@@ -31,10 +31,12 @@ docker start <container-id>
 
 ## Avviare il back-end (sviluppo)
 cd sleep-backend-api
+npm i
 node index.js
 
 ## Avviare il front-end (sviluppo)
 cd sleep-frontend
+npm i
 npm run dev
 
 
