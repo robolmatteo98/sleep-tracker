@@ -31,7 +31,7 @@ const Details = () => {
   const isInitialized = useRef(false);
 
   // Methods
-  const backToHomePage = () => navigate(`/`);
+  const backToHomePage = () => navigate(`/dashboard`);
 
   const fromDataToSleepData = (data: SleepDataResponse) => {
     const sleepData: SleepData[] = data.data.map(item => ({

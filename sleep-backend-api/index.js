@@ -8,12 +8,36 @@ const PORT = process.env.PORT || 5001; // usa la variabile, oppure un fallback
 
 const pool = require('./config/db');
 
+// bcrypt
+const bcrypt = require("bcrypt");
+
 // Abilita CORS per tutte le richieste
 app.use(cors());
 
 app.get('/', (req, res) => {
   return res.json('GET METHOD FROM THE APP.');
 });
+
+app.get('/auth', async (req, res) => {
+  let status = ""
+
+  const { username, plainPassword } = req.query;
+  console.log(req.query)
+
+  const result = await pool.query("SELECT Password_enc FROM Users WHERE Username = $1", [username]);
+  if (result.rows.length > 0) {
+    const isMatch = bcrypt.compare(plainPassword, result.rows[0].password_enc);
+    if (isMatch) {
+      status = "OK"
+    } else {
+      status = "Errore nel match, password errata"
+    }
+  } else {
+    status = "Utente non trovato"
+  }
+
+  return res.json(status);
+})
 
 app.get('/sleep_data_format', async (req, res) => {
   const results = await pool.query("SELECT * FROM sleep_data_format");

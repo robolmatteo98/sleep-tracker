@@ -1,0 +1,39 @@
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 12px 0;
+  color: white;
+  font-family: sans-serif;
+}
+
+.text label {
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #eaeaea;
+}
+
+.text input {
+  width: 240px;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  background-color: white;
+  color: black;
+  outline: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.text input::placeholder {
+  color: #888;
+}
+
+.text input:hover {
+  border-color: #4ba173;
+}
+
+.text input:focus {
+  border-color: #4ba173;
+  box-shadow: 0 0 6px rgba(75, 161, 115, 0.6);
+}

@@ -15,7 +15,7 @@ const Button = ({
   onClick,
   text,
   icon,
-  selected = null
+  selected = null,
 } : ButtonProps) => {
 
   // Render

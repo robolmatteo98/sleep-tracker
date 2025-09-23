@@ -8,5 +8,15 @@
 }
 
 .dashboard-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  position: relative;
   padding: 1%;
+}
+
+.dashboard-header-container button {
+  margin-left: auto;
+  width: 10%;
 }

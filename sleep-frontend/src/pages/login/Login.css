@@ -1,0 +1,19 @@
+.title {
+  text-align: center;
+  color: white;
+  padding: 1%;
+  font-size: 48px;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+.btnLogin {
+  padding-top: 2%;
+  width: 10%;
+}

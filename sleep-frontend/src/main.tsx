@@ -1,7 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
+import { AuthProvider } from "./pages/login/Auth";
+import ProtectedRoute from "./pages/login/ProtectedRoute";
+
+import Login from './pages/login/Login';
 import Dashboard from './pages/dashboard/Dashboard';
 import Details from './pages/details/Details';
 
@@ -9,11 +13,27 @@ import './main.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path='/details' element={<Details />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/details" element={
+            <ProtectedRoute>
+              <Details />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+    
   </StrictMode>,
 )

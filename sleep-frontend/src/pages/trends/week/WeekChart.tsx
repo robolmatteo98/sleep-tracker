@@ -49,7 +49,6 @@ const WeekChart = () => {
     fetchData();
   }, []);
 
-
   // Render
   return (
     <div>

@@ -3,12 +3,16 @@ import { useEffect, useState } from 'react';
 import './Dashboard.css';
 
 import Select from "../../components/select/Select";
+import Button from '../../components/button/Button';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 import DayChart from '../trends/day/DayChart';
 import WeekChart from '../trends/week/WeekChart';
 import MonthChart from '../trends/month/MonthChart';
 
 import { Option } from "../../types/entities";
+
+import { useAuth } from "../login/Auth";
 
 const trends: Option[] = [
   { value: "1", label: "GIORNALIERO" },
@@ -19,6 +23,9 @@ const trends: Option[] = [
 const Dashboard = () => {
   // States
   const [selectedTrend, setSelectedTrend] = useState<Option | null>(null);
+
+  // Hooks
+  const { logout } = useAuth();
 
   useEffect(() => {
     // Imposta il valore iniziale al primo render
@@ -37,6 +44,11 @@ const Dashboard = () => {
           options={trends}
           onChange={(option) => setSelectedTrend(option)}
           defaultValue='1'
+        />
+        <Button 
+          text='LOGOUT'
+          icon={faRightFromBracket}
+          onClick={logout}
         />
       </div>
 
