@@ -8,6 +8,7 @@ import ProtectedRoute from "./pages/login/ProtectedRoute";
 import Login from './pages/login/Login';
 import Dashboard from './pages/dashboard/Dashboard';
 import Details from './pages/details/Details';
+import SignUP from './pages/signUP/SignUP';
 
 import './main.css';
 
@@ -17,6 +18,8 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+
+          <Route path="/signup" element={<SignUP />} />
 
           <Route path="/dashboard" element={
             <ProtectedRoute>

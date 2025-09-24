@@ -47,7 +47,11 @@ const Details = () => {
   const fetchData = () => {
     setIsLoading(true);
 
-    axios.get('http://localhost:5001/sleep_data_format')
+    axios.get('http://localhost:5001/sleep_data_format', {
+      params: {
+        id: 2 // TODO: test
+      }
+    })
     .then((res) => fromDataToSleepData(res.data))
     .catch((e: AxiosError) => {
       console.log(e);

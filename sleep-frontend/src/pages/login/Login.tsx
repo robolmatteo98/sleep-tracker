@@ -14,6 +14,7 @@ const Login  = () => {
   // States
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorText, setErrorText] = useState<string>("");
 
   // Hooks
   const navigate = useNavigate();
@@ -25,20 +26,24 @@ const Login  = () => {
       params: {
         username: username,
         plainPassword: password
-      },
+      }
     })
     .then((res) => {
-      console.log(res.data)
-      if(res.data === "OK") {
-        login();
-        console.log('navigate to dashboard');
+      console.log(res.data);
+      if (res.data.message === "OK") {
+        login(res.data.userId);
         navigate('/dashboard');
+      } else {
+        setErrorText(res.data.message);
       }
     })
     .catch((e: AxiosError) => {
       console.log(e);
-    })
-  }
+      setErrorText(e.message);
+    });
+  };
+
+  const gotoSignUP = () => navigate('/signup');
 
   // Render
   return (
@@ -65,6 +70,16 @@ const Login  = () => {
             text="LOGIN"
             icon={faUser}
           />
+        </div>
+        <div className="btnSignUP">
+          <Button 
+            onClick={gotoSignUP}
+            text="SIGN UP"
+            icon={faUser}
+          />
+        </div>
+        <div className="errorText">
+          {errorText}
         </div>
       </div>
       

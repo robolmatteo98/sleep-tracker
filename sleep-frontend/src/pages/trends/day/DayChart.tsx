@@ -15,6 +15,8 @@ import { timeOfStage, formatMinutes, getPercentageValues } from "../../../utils/
 import { PercentageType, SleepData } from "../../../types/entities";
 import { SleepDataResponse } from "../../../types/responses";
 
+import { useAuth } from "../../login/Auth";
+
 import "./DayChart.css";
 
 const stages = ["REM", "Deep", "Light", "Awake"];
@@ -36,6 +38,7 @@ const DayChart = () => {
 
   // Hooks
   const navigate = useNavigate();
+  const { userId } = useAuth();
 
   // Methods
   const getTimeSleep = (date: string) => DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm').toFormat('HH:mm');
@@ -87,7 +90,11 @@ const DayChart = () => {
     setIsLoading(true);
 
     // agganciare data nella richiesta
-    axios.get('http://localhost:5001/sleep_data_format')
+    axios.get('http://localhost:5001/sleep_data_format', {
+      params: {
+        id: userId
+      }
+    })
     .then((res) => fromDataToSleepData(res.data))
     .catch((e: AxiosError) => {
       setError(e.message);

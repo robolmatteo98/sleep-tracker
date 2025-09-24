@@ -13,34 +13,62 @@ const bcrypt = require("bcrypt");
 
 // Abilita CORS per tutte le richieste
 app.use(cors());
+app.use(express.json());
 
 app.get('/', (req, res) => {
   return res.json('GET METHOD FROM THE APP.');
 });
 
 app.get('/auth', async (req, res) => {
-  let status = ""
-
-  const { username, plainPassword } = req.query;
-  console.log(req.query)
-
-  const result = await pool.query("SELECT Password_enc FROM Users WHERE Username = $1", [username]);
-  if (result.rows.length > 0) {
-    const isMatch = bcrypt.compare(plainPassword, result.rows[0].password_enc);
-    if (isMatch) {
-      status = "OK"
-    } else {
-      status = "Errore nel match, password errata"
-    }
-  } else {
-    status = "Utente non trovato"
+  let response = {
+    userId: null,
+    message: "OK",
+    code : 200
   }
 
-  return res.json(status);
-})
+  const { username, plainPassword } = req.query;
+
+  const result = await pool.query("SELECT id, password_enc FROM Users WHERE username = $1", [username]);
+  if (result.rowCount > 0) {
+    const user = result.rows[0];
+    const isMatch = await bcrypt.compare(plainPassword, user.password_enc);
+    console.log(result)
+    console.log(isMatch)
+
+    if (isMatch) {
+      response.userId = user.id
+    } else {
+      response.status = "Errore: password errata"
+      response.code = 500
+    }
+  } else {
+    response.status = "Utente non trovato"
+    response.code = 500
+  }
+
+  return res.json(response).status(response.code);
+});
+
+app.post('/signup', async (req, res) => {
+  try {
+    const { username, plainPassword } = req.body;
+
+    // genera l'hash della password
+    const saltRounds = 10; 
+    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+
+    await pool.query("INSERT INTO Users(username, password_enc) VALUES($1, $2)", [username, hashedPassword]);
+    return res.json({ status: "Utente creato correttamente" }).status(200);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ status: "Errore nel signup" });
+  }
+});
 
 app.get('/sleep_data_format', async (req, res) => {
-  const results = await pool.query("SELECT * FROM sleep_data_format");
+  const { id } = req.query;
+
+  const results = await pool.query("SELECT * FROM sleep_data_format WHERE fk_users = $1", [id]);
   console.log(results.rowCount);
   return res.json({ data: results.rows })
 });
