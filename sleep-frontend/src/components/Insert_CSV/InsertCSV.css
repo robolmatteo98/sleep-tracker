@@ -1,0 +1,37 @@
+.csv-box {
+  border: 2px dashed #aaa;
+  border-radius: 12px;
+  padding: 16px;
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.csv-preview {
+  margin-top: 16px;
+  text-align: left;
+}
+
+.csv-content {
+  background: #f4f4f4;
+  color: black;
+  padding: 8px;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow: auto;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.csv-status {
+  margin-top: 12px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.csv-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* spazio tra input e button */
+  justify-content: center; /* opzionale, centra nella box */
+}

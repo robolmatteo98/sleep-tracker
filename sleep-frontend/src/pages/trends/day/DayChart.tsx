@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faFileAlt, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { DateTime } from "luxon";
-import axios, { AxiosError } from "axios";
-import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import Button from "../../../components/button/Button";
@@ -19,10 +19,10 @@ import { useAuth } from "../../login/Auth";
 
 import "./DayChart.css";
 
+import InsertCSV from "../../../components/Insert_CSV/InsertCSV";
+
 const stages = ["REM", "Deep", "Light", "Awake"];
 
-const DEV_day = DateTime.local(2025, 4, 10).toJSDate();
-//const todaySleep = DateTime.now().minus({ days: 1 }).toJSDate();
 const obiettivoIdealeSonno = 8 * 60;
 
 const DayChart = () => {
@@ -30,11 +30,8 @@ const DayChart = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sleepData, setSleepData] = useState<SleepData[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [day, setDay] = useState<Date | null>(DEV_day);
+  const [day, setDay] = useState<Date | null>(DateTime.now().minus({ days: 1 }).toJSDate());
   const [percetage, setPercentage] = useState<PercentageType[]>([]);
-
-  // References
-  const isInitialized = useRef(false);
 
   // Hooks
   const navigate = useNavigate();
@@ -74,7 +71,6 @@ const DayChart = () => {
   }
 
   const fromDataToSleepData = (data: SleepDataResponse) => {
-    console.log(data)
     const sleepData: SleepData[] = data.data.map(item => ({
       id: item.id,
       _timestamp: DateTime.fromISO(item.timestamp).toFormat('dd/MM/yyyy HH:mm'),
@@ -86,37 +82,37 @@ const DayChart = () => {
     setPercentage(getPercentageValues(stages, sleepData));
   }
 
-  const fetchData = () => {
+  const fetchSleepData = async (selectedDay: Date) => {
     setIsLoading(true);
+    setError(null);
 
-    // agganciare data nella richiesta
-    axios.get('http://localhost:5001/sleep_data_format', {
-      params: {
-        id: userId
+    try {
+      const res = await axios.get('http://localhost:5001/sleep_data_format', {
+        params: {
+          id: userId,
+          date: DateTime.fromJSDate(selectedDay).toISODate()
+        }
+      });
+
+      if (res.data.data.length === 0) {
+        setError("Non esistono dati di questa giornata: " + DateTime.fromJSDate(selectedDay).toISODate());
+        setSleepData([]);
+        setPercentage([]);
+      } else {
+        fromDataToSleepData(res.data);
       }
-    })
-    .then((res) => fromDataToSleepData(res.data))
-    .catch((e: AxiosError) => {
-      setError(e.message);
-    })
-    .finally(() => {
+    } catch (e: any) {
+      setError(e.message || "Errore durante il fetch dei dati");
+    } finally {
       setIsLoading(false);
-    })
-  }
+    }
+  };
+
 
   useEffect(() => {
-    if (!day) return;
-  
-    if (day.getTime() === DEV_day.getTime()) {
-      if (!isInitialized.current) {
-        isInitialized.current = true;
-        fetchData();
-      }
-      setError(null); // reset error if it's the valid day
-    } else {
-      setError("Non esistono dati di questa giornata: " + DateTime.fromJSDate(day).toISODate());
-    }
-  }, [day]);  
+    if (day) fetchSleepData(day);
+  }, [day]);
+
 
   // Render
   return (
@@ -134,6 +130,11 @@ const DayChart = () => {
         ? (
           <div>
             {error}
+
+            <InsertCSV 
+              date={day}
+              setDay={setDay}
+            />
           </div>
         )
         : isLoading

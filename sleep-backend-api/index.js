@@ -3,6 +3,9 @@ require('dotenv').config(); // carica le variabili d'ambiente
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const multer = require("multer");
+const fs = require("fs");
+const csv = require('csv-parser');
 
 const PORT = process.env.PORT || 5001; // usa la variabile, oppure un fallback
 
@@ -66,11 +69,69 @@ app.post('/signup', async (req, res) => {
 });
 
 app.get('/sleep_data_format', async (req, res) => {
-  const { id } = req.query;
+  const { id, date } = req.query;
 
-  const results = await pool.query("SELECT * FROM sleep_data_format WHERE fk_users = $1", [id]);
-  console.log(results.rowCount);
-  return res.json({ data: results.rows })
+  const object_id_day = await pool.query("SELECT id FROM sleep_day WHERE fk_users = $1 AND day = $2", [id, date]);
+
+  if(object_id_day.rowCount > 0) {
+    const results = await pool.query("SELECT * FROM sleep_data_format WHERE fk_sleep_day = $1", [object_id_day.rows[0]['id']]);
+    return res.json({ data: results.rows });
+  } else {
+    return res.json({ data: [] });
+  }
+});
+
+const upload = multer({ dest: "uploads/" }); // salva il file nella cartella uploads/
+
+app.post("/upload-csv", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Nessun file caricato" });
+    }
+
+    const results = [];
+    const user_ID = req.body.userId;
+    const sleep_day = req.body.sleep_date;
+
+    const result = await pool.query(`INSERT INTO sleep_day(day, fk_users) VALUES($1, $2) RETURNING id`, [sleep_day, user_ID]);
+    const insertedId = result.rows[0].id;
+    console.log(insertedId)
+
+    // 1. Leggo il CSV
+    fs.createReadStream(req.file.path)
+      .pipe(csv())
+      .on("data", (data) => results.push(data))
+      .on("end", async () => {
+        console.log("CSV parsato:", results);
+
+        // 2. Inserisco i dati nella tabella sleep_data_format
+        // (adatta i campi in base alle tue colonne reali)
+        try {
+          for (const row of results) {
+            await pool.query(
+              `INSERT INTO sleep_data_format (timestamp, sleep_stage, fk_sleep_day)
+               VALUES ($1, $2, $3)`,
+              [
+                row['Timestamp'],
+                row['Sleep Stage'],
+                insertedId
+              ]
+            );
+          }
+
+          res.json({ message: "CSV caricato e salvato nel DB!" });
+        } catch (dbErr) {
+          console.error("Errore DB:", dbErr);
+          res.status(500).json({ message: "Errore durante l'inserimento nel DB" });
+        } finally {
+          // 3. Pulizia: rimuovo il file temporaneo
+          fs.unlinkSync(req.file.path);
+        }
+      });
+  } catch (err) {
+    console.error("Errore server:", err);
+    res.status(500).json({ message: "Errore interno" });
+  }
 });
 
 /*app.get('/total_sleep_last_day', async (req, res) => {

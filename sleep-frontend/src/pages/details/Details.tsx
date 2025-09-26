@@ -14,11 +14,14 @@ import { SleepDataResponse } from "../../types/responses";
 import { getPercentageValues } from "../../utils/function";
 import AreaChart from "../../components/CHARTS/areaChart/AreaChart";
 
+import { useAuth } from "../../pages/login/Auth";
+
 const stages = ["REM", "Deep", "Light", "Awake"];
 
 const Details = () => {
   // Hooks
   const navigate = useNavigate();
+  const { userId } = useAuth();
 
   // State
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +52,7 @@ const Details = () => {
 
     axios.get('http://localhost:5001/sleep_data_format', {
       params: {
-        id: 2 // TODO: test
+        id: userId
       }
     })
     .then((res) => fromDataToSleepData(res.data))
