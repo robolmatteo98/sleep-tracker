@@ -8,6 +8,7 @@ type ButtonProps = {
   text?: string;
   icon?: IconDefinition;
   selected?: boolean | null;
+  hidden?: boolean;
 }
 
 const Button = ({
@@ -16,7 +17,10 @@ const Button = ({
   text,
   icon,
   selected = null,
+  hidden
 } : ButtonProps) => {
+
+  if (hidden) return null;
 
   // Render
   return (

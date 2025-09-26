@@ -8,9 +8,10 @@ type SelectProps = {
   options: Option[];
   onChange?: (option: Option) => void;
   defaultValue?: string;
+  hidden?: boolean;
 };
 
-const Select = ({ name = "", id = "", options, onChange, defaultValue }: SelectProps) => {
+const Select = ({ name = "", id = "", options, onChange, defaultValue, hidden }: SelectProps) => {
   // States
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<Option | undefined>(options.find((opt) => opt.value === defaultValue));
@@ -35,9 +36,11 @@ const Select = ({ name = "", id = "", options, onChange, defaultValue }: SelectP
     if (onChange) onChange(option);
   };
 
+  if (hidden) return null;
+
   // Render
   return (
-    <div className="custom-select-container" ref={ref} id={id}>
+    <div className="custom-select-container" ref={ref} id={id} hidden={hidden}>
       <div className="custom-select-box" onClick={() => setIsOpen(!isOpen)}>
         {selectedOption?.label || "Select..."}
         <span className={`select-arrow ${isOpen ? "open" : ""}`}>&#9660;</span>

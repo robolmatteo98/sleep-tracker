@@ -23,6 +23,7 @@ const trends: Option[] = [
 const Dashboard = () => {
   // States
   const [selectedTrend, setSelectedTrend] = useState<Option | null>(null);
+  const [clickDetails, setClickDetails] = useState<boolean>(false);
 
   // Hooks
   const { logout } = useAuth();
@@ -37,25 +38,30 @@ const Dashboard = () => {
   return (
     <div className="container">
       <div className="dashboard-header-container">
-        <label htmlFor="trends">TREND: </label>
+        <label htmlFor="trends" hidden={clickDetails}>TREND: </label>
         <Select 
           name="trends"
           id="trends"
           options={trends}
           onChange={(option) => setSelectedTrend(option)}
           defaultValue='1'
+          hidden={clickDetails}
         />
         <Button 
           text='LOGOUT'
           icon={faRightFromBracket}
           onClick={logout}
+          hidden={clickDetails}
         />
       </div>
 
       {
         selectedTrend 
         ? selectedTrend.value === "1" 
-          ? <DayChart /> 
+          ? <DayChart
+              clickDetails={clickDetails}
+              setClickDetails={setClickDetails}
+            /> 
           : selectedTrend.value === "7"
             ? <WeekChart />
             : <MonthChart />

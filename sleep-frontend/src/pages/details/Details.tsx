@@ -1,7 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { DateTime } from "luxon";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 
 import "./Details.css";
 import Button from "../../components/button/Button";
@@ -14,15 +13,15 @@ import { SleepDataResponse } from "../../types/responses";
 import { getPercentageValues } from "../../utils/function";
 import AreaChart from "../../components/CHARTS/areaChart/AreaChart";
 
-import { useAuth } from "../../pages/login/Auth";
-
 const stages = ["REM", "Deep", "Light", "Awake"];
 
-const Details = () => {
-  // Hooks
-  const navigate = useNavigate();
-  const { userId } = useAuth();
+type DetailsProps = {
+  userId: number | null
+  date: string | null
+  setClickDetails: React.Dispatch<React.SetStateAction<boolean>>
+}
 
+const Details = ({ userId, date, setClickDetails } : DetailsProps) => {
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [sleepData, setSleepData] = useState<SleepData[]>([]);
@@ -34,8 +33,6 @@ const Details = () => {
   const isInitialized = useRef(false);
 
   // Methods
-  const backToHomePage = () => navigate(`/dashboard`);
-
   const fromDataToSleepData = (data: SleepDataResponse) => {
     const sleepData: SleepData[] = data.data.map(item => ({
       id: item.id,
@@ -52,7 +49,8 @@ const Details = () => {
 
     axios.get('http://localhost:5001/sleep_data_format', {
       params: {
-        id: userId
+        id: userId,
+        date: date
       }
     })
     .then((res) => fromDataToSleepData(res.data))
@@ -76,16 +74,16 @@ const Details = () => {
     <>
       <section>
         <div className="details-header-container">
-          <div className="width-button">
+          <div className="width-button_home">
             <Button 
-              onClick={backToHomePage}
+              onClick={() => setClickDetails(false)}
               text="Home Page"
               icon={faBackward}
             />
           </div>
           
     
-          <div className="width-button">
+          <div className="width-button_view">
             <Button 
               onClick={() => setVisualizzazioneTabellare(!visualizzazioneTabellare)}
               text="Visualizzazione tabellare"
