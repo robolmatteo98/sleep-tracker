@@ -6,6 +6,7 @@ const cors = require('cors');
 const multer = require("multer");
 const fs = require("fs");
 const csv = require('csv-parser');
+const { DateTime } = require('luxon');
 
 const PORT = process.env.PORT || 5001; // usa la variabile, oppure un fallback
 
@@ -74,8 +75,12 @@ app.get('/sleep_data_format', async (req, res) => {
   const object_id_day = await pool.query("SELECT id FROM sleep_day WHERE fk_users = $1 AND day = $2", [id, date]);
 
   if(object_id_day.rowCount > 0) {
-    const results = await pool.query("SELECT * FROM sleep_data_format WHERE fk_sleep_day = $1", [object_id_day.rows[0]['id']]);
-    return res.json({ data: results.rows });
+    const results = await pool.query("SELECT * FROM sleep_data_format WHERE fk_sleep_day = $1 order by timestamp", [object_id_day.rows[0]['id']]);
+
+    const min = await pool.query("SELECT MIN(timestamp) FROM sleep_data_format WHERE fk_sleep_day = $1", [object_id_day.rows[0]['id']]);
+    const max = await pool.query("SELECT MAX(timestamp) FROM sleep_data_format WHERE fk_sleep_day = $1", [object_id_day.rows[0]['id']]);
+
+    return res.json({ data: results.rows, min: min.rows[0]['min'], max: max.rows[0]['max'] });
   } else {
     return res.json({ data: [] });
   }
@@ -131,6 +136,56 @@ app.post("/upload-csv", upload.single("file"), async (req, res) => {
   } catch (err) {
     console.error("Errore server:", err);
     res.status(500).json({ message: "Errore interno" });
+  }
+});
+
+app.post('/insert-data', async (req, res) => {
+  const { userId, day, dalle, alle, stage } = req.body;
+
+  try {
+    // recupero sleep_day.id
+    const results = await pool.query(
+      `SELECT id FROM sleep_day WHERE fk_users = $1 AND day = $2`,
+      [userId, day]
+    );
+
+    if (results.rows.length === 0) {
+      return res.status(404).json({ error: "sleep_day non trovato" });
+    }
+
+    const sleepDayId = results.rows[0].id;
+
+    // parsing date (es. "2025-09-26T23:00")
+    const da = DateTime.fromISO(dalle);
+    const a = DateTime.fromISO(alle);
+
+    if (!da.isValid || !a.isValid) {
+      return res.status(400).json({ error: "Formato date non valido" });
+    }
+
+    // genera array di minuti
+    let current = da;
+    const values = [];
+
+    while (current <= a) {
+      values.push([sleepDayId, current.toISO(), stage]);
+      current = current.plus({ minutes: 1 });
+    }
+
+    // insert multiplo
+    const query = `
+      INSERT INTO sleep_data_format (fk_sleep_day, timestamp, sleep_stage)
+      VALUES ${values.map((_, i) => `($${i * 3 + 1}, $${i * 3 + 2}, $${i * 3 + 3})`).join(",")}
+    `;
+
+    const flatValues = values.flat();
+
+    await pool.query(query, flatValues);
+
+    res.json({ message: "Dati inseriti con successo", count: values.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Errore nel server" });
   }
 });
 
