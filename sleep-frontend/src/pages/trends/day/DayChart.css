@@ -12,6 +12,10 @@
 .center {
   width: 40%;
   padding-top: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .right {
@@ -56,8 +60,8 @@
 }
 
 .data-card-l {
-  margin: 1%;
-  padding-bottom: 1.5%;
+  padding: 2%;
+  width: 95%;
 }
 
 .data-card-insights {

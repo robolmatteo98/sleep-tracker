@@ -1,0 +1,41 @@
+.manual-box {
+  border: 2px dashed #aaa;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.manual-title {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.manual-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.manual-input-row .selectBox {
+  width: 20%;
+}
+
+.manual-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.manual-status {
+  margin-top: 16px;
+  font-weight: bold;
+  color: #007bff;
+}

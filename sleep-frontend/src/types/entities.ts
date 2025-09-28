@@ -4,7 +4,6 @@ export type Option = {
 };
 
 export type SleepData = {
-  id: number;
   _timestamp: string;
   _sleep_stage: string;
 };

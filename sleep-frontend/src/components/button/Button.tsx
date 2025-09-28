@@ -9,6 +9,7 @@ type ButtonProps = {
   icon?: IconDefinition;
   selected?: boolean | null;
   hidden?: boolean;
+  disable?: boolean;
 }
 
 const Button = ({
@@ -17,7 +18,8 @@ const Button = ({
   text,
   icon,
   selected = null,
-  hidden
+  hidden,
+  disable
 } : ButtonProps) => {
 
   if (hidden) return null;
@@ -28,6 +30,7 @@ const Button = ({
       className={selected === null ? "button-core" : selected ? "button-selected" : "button-not-selected"}
       name={name}
       onClick={onClick}
+      disabled={disable}
     >
       {icon ? (<FontAwesomeIcon icon={icon} />) : null}&nbsp;{text}
     </button>

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css";
@@ -11,65 +10,60 @@ type DatePickerProps = {
   name: string;
   onChange: (date: Date | null) => void;
   disable?: boolean;
-  defaultValue?: Date | null;
+  value?: Date | null;
+  withTime?: boolean;
+  withBrackets?: boolean;
 }
 
 const DatePickerWithClear = ({
   name,
   onChange,
   disable,
-  defaultValue,
+  value,
+  withTime,
+  withBrackets
 } : DatePickerProps) => {
-  // States
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-  // Hooks
-  useEffect(() => {
-    if (defaultValue) setSelectedDate(defaultValue);
-    else setSelectedDate(null);
-  }, [defaultValue]);
-
-  // Methods
   const handleChangeDateMin = (value: Date | null) => value ? DateTime.fromJSDate(value).minus({ days: 1 }).toJSDate() : null;
   const handleChangeDateMax = (value: Date | null) => value ? DateTime.fromJSDate(value).plus({ days: 1 }).toJSDate() : null;
+
   const handleChangeData = (plus: boolean) => {
-    const new_date = plus ? handleChangeDateMax(selectedDate) : handleChangeDateMin(selectedDate)
-    setSelectedDate(new_date);
+    const new_date = value ? plus ? handleChangeDateMax(value) : handleChangeDateMin(value) : handleChangeDateMax(null);
     onChange(new_date);
-  }
+  };
 
-  // Render
   return (
-    <>
-      <div className="datepicker-container">
-        <button
-          type="button"
-          className="arrow"
-          onClick={() => handleChangeData(false)}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
+    <div className="datepicker-container">
+      <button
+        type="button"
+        className="arrow"
+        onClick={() => handleChangeData(false)}
+        hidden={!withBrackets}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </button>
 
-        <DatePicker
-          name={name}
-          dateFormat="dd/MM/yyyy"
-          selected={selectedDate}
-          onChange={(date) => onChange(date)}
-          locale={it}
-          placeholderText="dd/MM/yyyy"
-          disabled={disable}
-          className="input-date"
-        />
+      <DatePicker
+        name={name}
+        dateFormat={withTime ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy"}
+        selected={value}
+        onChange={onChange}
+        locale={it}
+        placeholderText={withTime ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy"}
+        disabled={disable}
+        className="input-date"
+        showTimeSelect={withTime}
+        timeIntervals={1}
+      />
 
-        <button
-          type="button"
-          className="arrow"
-          onClick={() => handleChangeData(true)}
-        >
-          <FontAwesomeIcon icon={faArrowRight} />
-        </button>
-      </div>
-    </>
+      <button
+        type="button"
+        className="arrow"
+        onClick={() => handleChangeData(true)}
+        hidden={!withBrackets}
+      >
+        <FontAwesomeIcon icon={faArrowRight} />
+      </button>
+    </div>
   );
 };
 

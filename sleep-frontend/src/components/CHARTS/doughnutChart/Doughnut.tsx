@@ -44,7 +44,13 @@ const options = {
   }
 };
 
-const COLORS = ["#63d297", "#ff5252", "#2f855a", "#d9f2e5"];
+// 🎨 Mappa colori stage → colore
+const COLORS: Record<string, string> = {
+  Light: "#63d297",
+  Awake: "#ff5252",
+  Deep: "#2f855a",
+  REM: "#d9f2e5"
+};
 
 const DoughnutChart = ({ sleepData }: { sleepData: SleepData[] }) => {  
   const pieData = preparePieData(sleepData);
@@ -52,16 +58,19 @@ const DoughnutChart = ({ sleepData }: { sleepData: SleepData[] }) => {
   const labels = pieData.map(item => item.name);
   const values = pieData.map(item => item.value);
 
+  // Mappa i colori in base al nome dello stage
+  const backgroundColors = labels.map(label => COLORS[label.split(":")[0]] || "#ccc");
+
   const data = {
     labels,
     datasets: [
       {
         label: 'Fasi del Sonno',
         data: values,
-        backgroundColor: COLORS,
-        borderColor: COLORS,
+        backgroundColor: backgroundColors,
+        borderColor: backgroundColors,
         borderWidth: 1,
-        cutout: '70%' // più sottile
+        cutout: '70%'
       }
     ]
   };

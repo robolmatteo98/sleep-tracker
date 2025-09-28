@@ -72,6 +72,7 @@ const SignUP = () => {
             icon={faUser}
           />
         </div>
+        {/* metto button di ritorno a login */}
         <div className="errorText">
           {errorText}
         </div>

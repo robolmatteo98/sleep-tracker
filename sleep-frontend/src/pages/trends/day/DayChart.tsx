@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBed, faFileAlt, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faFileAlt, faList, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { DateTime } from "luxon";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ import "./DayChart.css";
 
 import InsertCSV from "../../../components/Insert_CSV/InsertCSV";
 import Details from "../../details/Details";
+import Insert_manual from "../../../components/Insert_manual/Insert_manual";
 
 const stages = ["REM", "Deep", "Light", "Awake"];
 
@@ -37,6 +38,7 @@ const DayChart = ({ clickDetails, setClickDetails } : DayChartProps) => {
   const [error, setError] = useState<string | null>(null);
   const [day, setDay] = useState<Date | null>(DateTime.now().minus({ days: 1 }).toJSDate());
   const [percetage, setPercentage] = useState<PercentageType[]>([]);
+  const [openInsertManual, setOpenInsertManual] = useState<boolean>(false);
 
   // Hooks
   const { userId } = useAuth();
@@ -75,15 +77,14 @@ const DayChart = ({ clickDetails, setClickDetails } : DayChartProps) => {
   }
 
   const fromDataToSleepData = (data: SleepDataResponse) => {
-    const sleepData: SleepData[] = data.data.map(item => ({
-      id: item.id,
+    const _sleepData: SleepData[] = data.data.map(item => ({
       _timestamp: DateTime.fromISO(item.timestamp).toFormat('dd/MM/yyyy HH:mm'),
       _sleep_stage: item.sleep_stage
     }));
 
-    console.log(sleepData)
-    setSleepData(sleepData);
-    setPercentage(getPercentageValues(stages, sleepData));
+    console.log(_sleepData)
+    setSleepData(_sleepData);
+    setPercentage(getPercentageValues(stages, _sleepData));
   }
 
   const fetchSleepData = async (selectedDay: Date) => {
@@ -114,78 +115,78 @@ const DayChart = ({ clickDetails, setClickDetails } : DayChartProps) => {
 
 
   useEffect(() => {
-    if (day) fetchSleepData(day);
-  }, [day]);
+    if (day && !openInsertManual) fetchSleepData(day);
+  }, [day, openInsertManual]);
 
 
   // Render
   return (
     <>
-    {
-      clickDetails ?
-      (
+      {!clickDetails && !openInsertManual && (
+        <div className="text-center">
+          <DatePickerWithClear 
+            name="date"
+            onChange={(date) => handleChangeDay(date)}
+            value={day}
+            withBrackets
+          />
+        </div>
+      )}
+
+      {clickDetails ? (
         <Details 
           userId={userId}
           date={day ? DateTime.fromJSDate(day).toISODate() : null}
           setClickDetails={setClickDetails}
         />
-      )
-      :
-      (
+      ) : openInsertManual ? (
+        <Insert_manual 
+          userId={userId}
+          day={day ? DateTime.fromJSDate(day).toISODate() : null}
+          startDate={sleepData[0]._timestamp}
+          endDate={sleepData[sleepData.length - 1]._timestamp}
+          setOpenInsertManual={setOpenInsertManual}
+        />
+      ) : (
         <>
-          <div className="text-center">
-            <DatePickerWithClear 
-              name="date"
-              onChange={(date) => handleChangeDay(date)}
-              defaultValue={day}
-            />
-          </div>
-
-          {
-            error 
-            ? (
-              <div>
-                {error}
-
-                <InsertCSV 
-                  date={day}
-                  setDay={setDay}
-                />
-              </div>
-            )
-            : isLoading
-            ? (
-              <div>
-                Caricamento
-              </div>
-            )
-            : (
-              <div className="form">
-                <div className="left">
-                  <p className="text-center text-bold">Insights e consigli</p>
-                  <div className="data-card-insights text-center">
-                    <p className="p-card-insights">
-                      Scegli un orario regolare per andare a dormire.
-                      L'orario ideale è tra le 22:00 e le 23:00.
-                    </p>
-                  </div>
-                  <div className="data-card-insights text-center">
-                    <p>
-                      Evita stimoli prima di dormire. Evita di utilizzare telefoni, tablet e pc 1 ora prima di andare a dormire.
-                    </p>
-                  </div>
-                  <div className="data-card-insights text-center">
-                    <p>
-                      Evita caffeina e bevande energetiche.
-                    </p>
-                  </div>
-                  <div className="data-card-insights text-center">
-                    <p>
-                      Leggi un libro, fai meditazione, stretching leggero o ascolta musica tranquilla.
-                    </p>
-                  </div>
+          {error ? (
+            <div>
+              {error}
+              <InsertCSV 
+                date={day}
+                setDay={setDay}
+              />
+            </div>
+          ) : isLoading ? (
+            <div>Caricamento</div>
+          ) : (
+            <div className="form">
+              <div className="left">
+                <p className="text-center text-bold">Insights e consigli</p>
+                <div className="data-card-insights text-center">
+                  <p className="p-card-insights">
+                    Scegli un orario regolare per andare a dormire.
+                    L'orario ideale è tra le 22:00 e le 23:00.
+                  </p>
                 </div>
-                <div className="center data-card-l">
+                <div className="data-card-insights text-center">
+                  <p>
+                    Evita stimoli prima di dormire. Evita di utilizzare telefoni, tablet e pc 1 ora prima di andare a dormire.
+                  </p>
+                </div>
+                <div className="data-card-insights text-center">
+                  <p>
+                    Evita caffeina e bevande energetiche.
+                  </p>
+                </div>
+                <div className="data-card-insights text-center">
+                  <p>
+                    Leggi un libro, fai meditazione, stretching leggero o ascolta musica tranquilla.
+                  </p>
+                </div>
+              </div>
+              <div className="center">
+                <div className="data-card-l">
                   <h1 className="text-center">
                     PUNTEGGIO: {getPunteggio(sleepData)?.toFixed(0)}&nbsp;<FontAwesomeIcon icon={faMoon} />
                     <p className="text-medium">{getQuality(getPunteggio(sleepData))}</p>
@@ -223,17 +224,24 @@ const DayChart = ({ clickDetails, setClickDetails } : DayChartProps) => {
                     />
                   </div>
                 </div>
-                <div className="right">
-                  <DoughnutChart sleepData={sleepData} />
+                <div className="data-card-l manual">
+                  <Button 
+                    text="Inserisci manualmente"
+                    onClick={() => setOpenInsertManual(true)}
+                    icon={faList}
+                  />
                 </div>
               </div>
-            )
-          }
+              <div className="right">
+                <DoughnutChart sleepData={sleepData} />
+              </div>
+            </div>
+          )}
         </>
-      )
-    }
+      )}
     </>
   );
+
 }
 
 export default DayChart;
