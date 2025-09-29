@@ -8,10 +8,28 @@ docker cp db/4-sleep_data_2025-02-11.csv my-postgres:/4-sleep_data_2025-02-11.cs
 
 docker exec -it my-postgres psql -U admin -d sleep_db
 
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_enc VARCHAR(255) NOT NULL,
+  email VARCHAR(100),
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+)
+
+CREATE TABLE sleep_day (
+  id SERIAL PRIMARY KEY,
+  day DATE NOT NULL,
+  fk_users INTEGER NOT NULL,
+  CONSTRAINT fk_sleep_day_users FOREIGN KEY (fk_users) REFERENCES users(id)
+);
+
 CREATE TABLE sleep_data (
   id SERIAL PRIMARY KEY,
   timestamp TIMESTAMP NOT NULL,
-  sleep_stage VARCHAR(50) NOT NULL
+  sleep_stage VARCHAR(50) NOT NULL,
+  fk_sleep_day INTEGER,
+  CONSTRAINT fk_sleep_data_format_sleep_day FOREIGN KEY (fk_sleep_day) REFERENCES sleep_day(id)
 );
 
 COPY sleep_data_format(timestamp, sleep_stage)
