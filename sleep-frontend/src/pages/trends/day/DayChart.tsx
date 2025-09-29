@@ -21,6 +21,7 @@ import "./DayChart.css";
 import InsertCSV from "../../../components/Insert_CSV/InsertCSV";
 import Details from "../../details/Details";
 import Insert_manual from "../../../components/Insert_manual/Insert_manual";
+import Insights from "../../../components/insights/Insights";
 
 const stages = ["REM", "Deep", "Light", "Awake"];
 
@@ -162,28 +163,10 @@ const DayChart = ({ clickDetails, setClickDetails } : DayChartProps) => {
           ) : (
             <div className="form">
               <div className="left">
-                <p className="text-center text-bold">Insights e consigli</p>
-                <div className="data-card-insights text-center">
-                  <p className="p-card-insights">
-                    Scegli un orario regolare per andare a dormire.
-                    L'orario ideale è tra le 22:00 e le 23:00.
-                  </p>
-                </div>
-                <div className="data-card-insights text-center">
-                  <p>
-                    Evita stimoli prima di dormire. Evita di utilizzare telefoni, tablet e pc 1 ora prima di andare a dormire.
-                  </p>
-                </div>
-                <div className="data-card-insights text-center">
-                  <p>
-                    Evita caffeina e bevande energetiche.
-                  </p>
-                </div>
-                <div className="data-card-insights text-center">
-                  <p>
-                    Leggi un libro, fai meditazione, stretching leggero o ascolta musica tranquilla.
-                  </p>
-                </div>
+                <Insights 
+                  day={day}
+                  startDate={sleepData.length > 0 ? sleepData[0]._timestamp : null}
+                />
               </div>
               <div className="center">
                 <div className="data-card-l">

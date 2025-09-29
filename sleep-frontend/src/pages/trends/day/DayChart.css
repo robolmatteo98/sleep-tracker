@@ -64,17 +64,8 @@
   width: 95%;
 }
 
-.data-card-insights {
-  border: 1px solid;
-  border-radius: 12px;
-  height: min-content;
-  padding: 2%;
-  margin: 1%;
-}
-
 .data-card-l:hover,
-.data-card-r:hover,
-.data-card-insights:hover {
+.data-card-r:hover {
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
   transition: box-shadow 0.3s ease;
 }
@@ -85,11 +76,6 @@
 
 .text-medium {
   font-size: medium;
-}
-
-.text-bold {
-  font-weight: bold;
-  font-size: larger;
 }
 
 /* colori */

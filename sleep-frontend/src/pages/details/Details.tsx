@@ -122,7 +122,7 @@ const Details = ({ userId, date, setClickDetails } : DetailsProps) => {
                 <tbody>
                   {sleepData.map((el, index) => (
                     <tr key={index} className={el._sleep_stage}>
-                      <td>{index}</td>
+                      <td>{index + 1}</td>
                       <td>{el._timestamp}</td>
                       <td>{el._sleep_stage}</td>
                     </tr>
